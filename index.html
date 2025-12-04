@@ -11,7 +11,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        /* ===================== B站相关样式 ===================== */
+
         :root {
             --primary: #3498db;
             --secondary: #2c3e50;
@@ -424,6 +424,8 @@
             border-top: 1px solid #eee;
             color: #888;
             font-size: 0.85rem;
+            flex-wrap: wrap;
+            gap: 10px;
         }
 
         .video-duration {
@@ -437,87 +439,43 @@
             color: var(--gray);
         }
 
-        /* 视频模态框 - 全屏播放 */
-        .video-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.95);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .video-modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            width: 90%;
-            max-width: 900px;
-            position: relative;
-        }
-
-        .modal-content video {
-            width: 100%;
-            border-radius: 8px;
-            max-height: 80vh;
-        }
-
-        .close-modal {
+        /* B站相关样式 */
+        .bilibili-badge {
             position: absolute;
-            top: -40px;
-            right: 0;
-            background: none;
-            border: none;
+            top: 10px;
+            right: 10px;
+            background: rgba(251, 114, 153, 0.9);
             color: white;
-            font-size: 1.8rem;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            z-index: 2;
+            font-weight: bold;
+        }
+
+        .bilibili-btn {
+            background: #fb7299;
+            color: white;
+            border: none;
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
             cursor: pointer;
-            width: 40px;
-            height: 40px;
+            transition: all 0.3s ease;
+            font-weight: bold;
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 5px;
         }
 
-        .close-modal:hover {
-            color: var(--primary);
+        .bilibili-btn:hover {
+            background: #ff85a7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(251, 114, 153, 0.3);
         }
 
-        /* 视频加载更多按钮 */
-        .load-more-videos-container {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        .load-more-videos-btn {
-            background-color: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 30px;
-            font-size: 1rem;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: var(--transition);
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .load-more-videos-btn:hover {
-            background-color: #2980b9;
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        .load-more-videos-btn:disabled {
-            background-color: var(--gray);
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .video-item:hover .bilibili-badge {
+            background: rgba(251, 114, 153, 1);
         }
         /* ===================== 视频板块样式结束 ===================== */
 
@@ -679,10 +637,6 @@
             .video-player {
                 height: 180px;
             }
-            
-            .modal-content {
-                width: 95%;
-            }
         }
 
         @media (max-width: 480px) {
@@ -692,6 +646,17 @@
             
             .video-info h3 {
                 font-size: 1.1rem;
+            }
+            
+            .video-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .bilibili-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -708,7 +673,7 @@
                 <li><a href="#home">首页</a></li>
                 <li><a href="#about">关于我</a></li>
                 <li><a href="#portfolio">作品集</a></li>
-                <li><a href="#videos">航拍视频</a></li> <!-- 新增视频导航 -->
+                <li><a href="#videos">航拍视频</a></li>
                 <li><a href="#gear">我的设备</a></li>
                 <li><a href="#contact">联系我</a></li>
             </ul>
@@ -775,12 +740,12 @@
         </div>
     </section>
 
-    <!-- ===================== 新增视频板块 ===================== -->
+    <!-- ===================== 视频板块 ===================== -->
     <section class="videos" id="videos">
         <div class="container">
             <div class="section-title">
                 <h2>航拍视频作品</h2>
-                <p>动态视角下的世界，感受航拍的魅力</p>
+                <p>动态视角下的世界，点击观看B站视频</p>
             </div>
             
             <div class="videos-grid" id="videosGrid">
@@ -796,18 +761,6 @@
             </div>
         </div>
     </section>
-
-    <!-- 视频模态框（全屏播放） -->
-    <div class="video-modal" id="videoModal">
-        <div class="modal-content">
-            <button class="close-modal" id="closeModal">
-                <i class="fas fa-times"></i>
-            </button>
-            <video id="modalVideo" controls>
-                您的浏览器不支持视频播放。
-            </video>
-        </div>
-    </div>
     <!-- ===================== 视频板块结束 ===================== -->
 
     <!-- 设备区域 -->
@@ -893,7 +846,7 @@
                 <p>一个学生航拍爱好者的个人作品集</p>
                 
                 <div class="social-icons">
-                    <a href="#"><i class="fab fa-bilibili"></i></a>
+                    <a href="https://space.bilibili.com/33115840" target="_blank"><i class="fab fa-bilibili"></i></a>
                 </div>
             </div>
             
@@ -907,7 +860,6 @@
     <script>
         // 所有航拍作品数据
         const portfolioData = [
-            // 前6个为初始显示
             {
                 img: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/原树立交桥.jpg",
                 title: "原树立交桥",
@@ -944,7 +896,6 @@
                 desc: "在海拔三千米的褶皱里，藏着一片未被命名的绿。",
                 time: "2023年8月"
             },
-            // 更多作品
             {
                 img: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/高原上的0与1.jpg",
                 title: "高原上的0与1",
@@ -956,27 +907,15 @@
                 title: "南山下，星火人间",
                 desc: "西宁把星光铺成街，把湟水染成银河。",
                 time: "2023年10月"
-            },
-            {
-                img: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/高原雪霁.jpg",
-                title: "高原雪霁",
-                desc: "在湟水谷地的褶皱里，一座小村被雪轻轻盖上棉被。",
-                time: "2023年11月"
-            },
-            {
-                img: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/星光夜市.jpg",
-                title: "星光夜市",
-                desc: "澜沧江边，星光如瀑，一整条街的烟火气，都在为夜晚加温。",
-                time: "2025年1月"
             }
         ];
 
-        // ===================== 新增视频数据 =====================
+        // ===================== 视频数据 =====================
         const videoData = [
             {
                 title: "原树立交桥",
                 description: "海拔2200米的城市光轨，夜晚的车流如星河倾泻",
-                videoSrc: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
+                bilibiliUrl: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
                 thumbnail: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/原树立交桥.jpg",
                 duration: "1:45",
                 date: "2022年11月"
@@ -984,61 +923,44 @@
             {
                 title: "西宁奥体中心全景",
                 description: "从空中俯瞰西宁奥林匹克体育中心，感受建筑的宏伟",
-                videoSrc: "videos/xining_olympic.mp4",
-                thumbnail: "images/西宁奥林匹克体育中心.jpg",
+                bilibiliUrl: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
+                thumbnail: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/西宁奥林匹克体育中心.jpg",
                 duration: "2:15",
                 date: "2022年8月"
             },
             {
                 title: "柴达木沙漠穿越",
                 description: "无人机穿越柴达木沙漠，记录大漠的壮阔与天光的神奇",
-                videoSrc: "videos/chaidamu_desert.mp4",
-                thumbnail: "images/大漠 · 天光.jpg",
+                bilibiliUrl: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
+                thumbnail: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/大漠 · 天光.jpg",
                 duration: "3:20",
                 date: "2022年8月"
             },
             {
-                title: "万丈盐桥航拍之旅",
+                title: "万丈盐桥航拍",
                 description: "沿着万丈盐桥飞行，感受盐湖的独特地貌与壮丽景色",
-                videoSrc: "videos/salt_bridge.mp4",
-                thumbnail: "images/万丈盐桥.jpg",
+                bilibiliUrl: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
+                thumbnail: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/万丈盐桥.jpg",
                 duration: "2:30",
                 date: "2022年8月"
             },
             {
-                title: "西宁夏日的绿与蓝",
+                title: "西宁夏日风光",
                 description: "夏季西宁的山水交融，绿山与蓝天的完美组合",
-                videoSrc: "videos/green_and_blue.mp4",
-                thumbnail: "images/绿与蓝.jpg",
+                bilibiliUrl: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
+                thumbnail: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/绿与蓝.jpg",
                 duration: "1:50",
                 date: "2023年7月"
             },
             {
                 title: "高原山地航拍",
                 description: "探索海拔三千米的山地，发现隐藏在山间的绿色秘境",
-                videoSrc: "videos/mountain_heartbeat.mp4",
-                thumbnail: "images/大山的心跳.jpg",
+                bilibiliUrl: "https://www.bilibili.com/video/BV1ra2aBCEQa/",
+                thumbnail: "https://raw.githubusercontent.com/autumnwindslove/skyeye/main/images/大山的心跳.jpg",
                 duration: "2:45",
                 date: "2023年8月"
-            },
-            {
-                title: "高原机房与自然",
-                description: "现代科技与自然景观的对话，高原上的数字世界",
-                videoSrc: "videos/highland_computer_room.mp4",
-                thumbnail: "images/高原上的0与1.jpg",
-                duration: "2:10",
-                date: "2023年10月"
-            },
-            {
-                title: "西宁夜景航拍",
-                description: "夜幕下的西宁，星火点点，湟水如银河般流淌",
-                videoSrc: "videos/xining_night_view.mp4",
-                thumbnail: "images/南山下，星火人间.jpg",
-                duration: "2:55",
-                date: "2023年10月"
             }
         ];
-        // ===================== 视频数据结束 =====================
 
         // 移动端导航菜单切换
         const mobileToggle = document.getElementById('mobileToggle');
@@ -1077,14 +999,14 @@
             });
         });
         
-        // ===================== 原有图片加载功能 =====================
+        // ===================== 图片作品加载功能 =====================
         const loadMoreBtn = document.getElementById('loadMoreBtn');
         const portfolioGrid = document.getElementById('portfolioGrid');
         const loadingStatus = document.getElementById('loadingStatus');
         
-        let currentIndex = 0; // 当前加载到的索引
-        const itemsPerLoad = 6; // 初始加载数量
-        const itemsPerClick = 3; // 每次点击加载数量
+        let currentIndex = 0;
+        const itemsPerLoad = 6;
+        const itemsPerClick = 3;
         
         // 创建作品项目
         function createPortfolioItem(item) {
@@ -1143,15 +1065,11 @@
         
         // 加载更多按钮点击事件
         loadMoreBtn.addEventListener('click', function() {
-            // 显示加载状态
             this.classList.add('loading');
             
-            // 模拟网络延迟
             setTimeout(() => {
-                // 添加新项目
                 const loadedCount = loadPortfolioItems(itemsPerClick);
                 
-                // 更新按钮状态
                 this.classList.remove('loading');
                 updateLoadingStatus();
                 
@@ -1162,49 +1080,46 @@
             }, 600);
         });
         
-        // ===================== 新增视频功能 =====================
+        // ===================== 视频功能 =====================
         const videosGrid = document.getElementById('videosGrid');
         const loadMoreVideosBtn = document.getElementById('loadMoreVideosBtn');
         const loadingVideosStatus = document.getElementById('loadingVideosStatus');
-        const videoModal = document.getElementById('videoModal');
-        const modalVideo = document.getElementById('modalVideo');
-        const closeModal = document.getElementById('closeModal');
         
         let currentVideoIndex = 0;
-        const videosPerLoad = 4; // 初始加载视频数量
-        const videosPerClick = 2; // 每次点击加载视频数量
+        const videosPerLoad = 4;
+        const videosPerClick = 2;
         
         // 创建视频项目
-        // ===================== 创建视频项目的函数 =====================
         function createVideoItem(video) {
             const videoItem = document.createElement('div');
             videoItem.className = 'video-item';
             videoItem.innerHTML = `
-        <div class="video-player" data-bilibili-url="${video.bilibiliUrl}">
-            <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
-            <div class="play-button-overlay">
-                <div class="play-icon">
-                    <i class="fas fa-play"></i>
+                <div class="video-player" data-bilibili-url="${video.bilibiliUrl}">
+                    <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
+                    <div class="play-button-overlay">
+                        <div class="play-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                    </div>
+                    <div class="bilibili-badge">
+                        <i class="fab fa-bilibili"></i> B站
+                    </div>
                 </div>
-            </div>
-            <div class="bilibili-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(251, 114, 153, 0.9); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
-                <i class="fab fa-bilibili"></i> B站
-            </div>
-        </div>
-        <div class="video-info">
-            <h3><i class="fas fa-video"></i> ${video.title}</h3>
-            <p>${video.description}</p>
-            <div class="video-meta">
-                <span class="video-duration"><i class="fas fa-clock"></i> ${video.duration}</span>
-                <span class="video-date"><i class="far fa-calendar"></i> ${video.date}</span>
-                <button class="bilibili-btn" style="background: #fb7299; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">
-                    <i class="fab fa-bilibili"></i> 去B站观看
-                </button>
-            </div>
-        </div>
-    `;
-    return videoItem;
-}    
+                <div class="video-info">
+                    <h3><i class="fas fa-video"></i> ${video.title}</h3>
+                    <p>${video.description}</p>
+                    <div class="video-meta">
+                        <span class="video-duration">${video.duration}</span>
+                        <span class="video-date">${video.date}</span>
+                        <button class="bilibili-btn">
+                            <i class="fab fa-bilibili"></i> 去B站观看
+                        </button>
+                    </div>
+                </div>
+            `;
+            return videoItem;
+        }
+        
         // 加载视频
         function loadVideos(count) {
             const fragment = document.createDocumentFragment();
@@ -1243,80 +1158,40 @@
             }
         }
         
-        // 视频点击播放功能
-        // ===================== 视频点击事件 =====================
-function initVideoPlayback() {
-    document.addEventListener('click', function(e) {
-        // 点击视频卡片任意位置（除了"去B站观看"按钮）
-        if (e.target.closest('.video-item') && !e.target.closest('.bilibili-btn')) {
-            const videoItem = e.target.closest('.video-item');
-            const videoPlayer = videoItem.querySelector('.video-player');
-            const bilibiliUrl = videoPlayer.getAttribute('data-bilibili-url');
-            
-            if (bilibiliUrl) {
-                // 在新标签页打开B站
-                window.open(bilibiliUrl, '_blank');
-                console.log('跳转到B站视频:', bilibiliUrl);
-            }
-        }
-        
-        // 点击"去B站观看"按钮
-        if (e.target.closest('.bilibili-btn')) {
-            e.stopPropagation(); // 阻止事件冒泡
-            const videoItem = e.target.closest('.video-item');
-            const videoPlayer = videoItem.querySelector('.video-player');
-            const bilibiliUrl = videoPlayer.getAttribute('data-bilibili-url');
-            
-            if (bilibiliUrl) {
-                window.open(bilibiliUrl, '_blank');
-            }
-        }
-    });
-}
-            
-            // 关闭模态框
-            closeModal.addEventListener('click', function() {
-                videoModal.classList.remove('active');
-                modalVideo.pause();
-                modalVideo.currentTime = 0;
-                modalVideo.src = '';
-                document.body.style.overflow = 'auto';
-            });
-            
-            // 点击模态框背景关闭
-            videoModal.addEventListener('click', function(e) {
-                if (e.target === videoModal) {
-                    videoModal.classList.remove('active');
-                    modalVideo.pause();
-                    modalVideo.currentTime = 0;
-                    modalVideo.src = '';
-                    document.body.style.overflow = 'auto';
+        // 视频点击播放功能（跳转B站）
+        function initVideoPlayback() {
+            document.addEventListener('click', function(e) {
+                // 点击视频卡片任意位置
+                if (e.target.closest('.video-player')) {
+                    const videoPlayer = e.target.closest('.video-player');
+                    const bilibiliUrl = videoPlayer.getAttribute('data-bilibili-url');
+                    
+                    if (bilibiliUrl) {
+                        window.open(bilibiliUrl, '_blank');
+                    }
                 }
-            });
-            
-            // ESC键关闭模态框
-            document.addEventListener('keydown', function(e) {
-                if (e.key === 'Escape' && videoModal.classList.contains('active')) {
-                    videoModal.classList.remove('active');
-                    modalVideo.pause();
-                    modalVideo.currentTime = 0;
-                    modalVideo.src = '';
-                    document.body.style.overflow = 'auto';
+                
+                // 点击"去B站观看"按钮
+                if (e.target.closest('.bilibili-btn')) {
+                    e.stopPropagation();
+                    const videoItem = e.target.closest('.video-item');
+                    const videoPlayer = videoItem.querySelector('.video-player');
+                    const bilibiliUrl = videoPlayer.getAttribute('data-bilibili-url');
+                    
+                    if (bilibiliUrl) {
+                        window.open(bilibiliUrl, '_blank');
+                    }
                 }
             });
         }
         
         // 视频加载更多按钮
         loadMoreVideosBtn.addEventListener('click', function() {
-            // 显示加载状态
             this.classList.add('loading');
             
-            // 模拟网络延迟
             setTimeout(() => {
-                // 添加新视频
                 const loadedCount = loadVideos(videosPerClick);
                 
-                // 更新按钮状态
                 this.classList.remove('loading');
                 updateVideosLoadingStatus();
                 
@@ -1329,11 +1204,8 @@ function initVideoPlayback() {
         
         // 初始化视频部分
         function initVideos() {
-            // 初始加载视频
             loadVideos(videosPerLoad);
             updateVideosLoadingStatus();
-            
-            // 初始化视频播放功能
             initVideoPlayback();
         }
         
@@ -1342,7 +1214,6 @@ function initVideoPlayback() {
             loadPortfolioItems(itemsPerLoad);
             updateLoadingStatus();
             
-            // 初始项目直接显示
             setTimeout(() => {
                 const initialItems = portfolioGrid.querySelectorAll('.portfolio-item');
                 initialItems.forEach((item, index) => {
@@ -1355,13 +1226,9 @@ function initVideoPlayback() {
         
         // 初始动画效果
         document.addEventListener('DOMContentLoaded', function() {
-            // 初始化图片作品集
             initPortfolio();
-            
-            // 初始化视频板块
             initVideos();
             
-            // 滚动动画
             const observerOptions = {
                 threshold: 0.1
             };
@@ -1375,7 +1242,6 @@ function initVideoPlayback() {
                 });
             }, observerOptions);
             
-            // 为需要动画的元素添加观察
             document.querySelectorAll('.gear-item, .about-content').forEach(el => {
                 el.style.opacity = '0';
                 el.style.transform = 'translateY(20px)';
@@ -1384,15 +1250,10 @@ function initVideoPlayback() {
             });
         });
         
-        // 简单的控制台欢迎信息
-        console.log("欢迎来到我的航拍作品集！这是一个学生个人项目。");
-        console.log("网站代码完全开源，欢迎学习交流。");
-        console.log(`共有 ${portfolioData.length} 个航拍作品和 ${videoData.length} 个航拍视频可供浏览。`);
+        // 控制台欢迎信息
+        console.log("欢迎来到天空之眼航拍作品集！");
+        console.log(`共有 ${portfolioData.length} 个航拍作品和 ${videoData.length} 个航拍视频。`);
+        console.log("视频点击后会跳转到B站观看。");
     </script>
 </body>
-
 </html>
-
-
-
-
