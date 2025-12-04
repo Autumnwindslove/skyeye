@@ -11,7 +11,38 @@
             padding: 0;
             box-sizing: border-box;
         }
+        /* ===================== B站相关样式 ===================== */
+.bilibili-badge {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(251, 114, 153, 0.9);
+    color: white;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    z-index: 2;
+}
 
+.bilibili-btn {
+    background: #fb7299 !important;
+    color: white !important;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.bilibili-btn:hover {
+    background: #ff85a7 !important;
+    transform: translateY(-2px);
+}
+
+.video-item:hover .bilibili-badge {
+    background: rgba(251, 114, 153, 1);
+}
         :root {
             --primary: #3498db;
             --secondary: #2c3e50;
@@ -1392,6 +1423,7 @@ function initVideoPlayback() {
 </body>
 
 </html>
+
 
 
 
