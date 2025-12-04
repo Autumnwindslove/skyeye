@@ -1175,30 +1175,36 @@
         const videosPerClick = 2; // 每次点击加载视频数量
         
         // 创建视频项目
+        // ===================== 创建视频项目的函数 =====================
         function createVideoItem(video) {
             const videoItem = document.createElement('div');
             videoItem.className = 'video-item';
             videoItem.innerHTML = `
-                <div class="video-player">
-                    <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
-                    <div class="play-button-overlay" data-video-src="${video.videoSrc}">
-                        <div class="play-icon">
-                            <i class="fas fa-play"></i>
-                        </div>
-                    </div>
+        <div class="video-player" data-bilibili-url="${video.bilibiliUrl}">
+            <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
+            <div class="play-button-overlay">
+                <div class="play-icon">
+                    <i class="fas fa-play"></i>
                 </div>
-                <div class="video-info">
-                    <h3><i class="fas fa-video"></i> ${video.title}</h3>
-                    <p>${video.description}</p>
-                    <div class="video-meta">
-                        <span class="video-duration">${video.duration}</span>
-                        <span class="video-date">${video.date}</span>
-                    </div>
-                </div>
-            `;
-            return videoItem;
-        }
-        
+            </div>
+            <div class="bilibili-badge" style="position: absolute; top: 10px; right: 10px; background: rgba(251, 114, 153, 0.9); color: white; padding: 3px 8px; border-radius: 4px; font-size: 0.8rem;">
+                <i class="fab fa-bilibili"></i> B站
+            </div>
+        </div>
+        <div class="video-info">
+            <h3><i class="fas fa-video"></i> ${video.title}</h3>
+            <p>${video.description}</p>
+            <div class="video-meta">
+                <span class="video-duration"><i class="fas fa-clock"></i> ${video.duration}</span>
+                <span class="video-date"><i class="far fa-calendar"></i> ${video.date}</span>
+                <button class="bilibili-btn" style="background: #fb7299; color: white; border: none; padding: 5px 10px; border-radius: 4px; font-size: 0.8rem; cursor: pointer;">
+                    <i class="fab fa-bilibili"></i> 去B站观看
+                </button>
+            </div>
+        </div>
+    `;
+    return videoItem;
+}    
         // 加载视频
         function loadVideos(count) {
             const fragment = document.createDocumentFragment();
@@ -1238,21 +1244,35 @@
         }
         
         // 视频点击播放功能
-        function initVideoPlayback() {
-            document.addEventListener('click', function(e) {
-                // 点击播放按钮
-                if (e.target.closest('.play-button-overlay')) {
-                    const playButton = e.target.closest('.play-button-overlay');
-                    const videoSrc = playButton.getAttribute('data-video-src');
-                    
-                    modalVideo.src = videoSrc;
-                    videoModal.classList.add('active');
-                    modalVideo.play();
-                    
-                    // 防止背景滚动
-                    document.body.style.overflow = 'hidden';
-                }
-            });
+        // ===================== 视频点击事件 =====================
+function initVideoPlayback() {
+    document.addEventListener('click', function(e) {
+        // 点击视频卡片任意位置（除了"去B站观看"按钮）
+        if (e.target.closest('.video-item') && !e.target.closest('.bilibili-btn')) {
+            const videoItem = e.target.closest('.video-item');
+            const videoPlayer = videoItem.querySelector('.video-player');
+            const bilibiliUrl = videoPlayer.getAttribute('data-bilibili-url');
+            
+            if (bilibiliUrl) {
+                // 在新标签页打开B站
+                window.open(bilibiliUrl, '_blank');
+                console.log('跳转到B站视频:', bilibiliUrl);
+            }
+        }
+        
+        // 点击"去B站观看"按钮
+        if (e.target.closest('.bilibili-btn')) {
+            e.stopPropagation(); // 阻止事件冒泡
+            const videoItem = e.target.closest('.video-item');
+            const videoPlayer = videoItem.querySelector('.video-player');
+            const bilibiliUrl = videoPlayer.getAttribute('data-bilibili-url');
+            
+            if (bilibiliUrl) {
+                window.open(bilibiliUrl, '_blank');
+            }
+        }
+    });
+}
             
             // 关闭模态框
             closeModal.addEventListener('click', function() {
@@ -1372,5 +1392,6 @@
 </body>
 
 </html>
+
 
 
